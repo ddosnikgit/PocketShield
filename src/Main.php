@@ -33,10 +33,9 @@ class Main extends \pocketmine\plugin\PluginBase implements \pocketmine\event\Li
 		    if($this->handleQueue[$ip][$port]['packets'] > 450){
 		    	$this->isFlooding = true;
 		    	
-			    \pocketmine\Server::getInstance()->getLogger()->warning("Flood detected to user-ip: {$ip}");
+			    \pocketmine\Server::getInstance()->getLogger()->warning("Flood detected from: {$ip}");
 			    \pocketmine\Server::getInstance()->getLogger()->warning("PacketsPerSecond: {$this->handleQueue[$ip][$port]['packets']}");
-
-			    //$this->getServer()->getNetwork()->blockAddress($ip);
+                            
 			    unset($this->handleQueue[$ip]);
 
 			    return true;
@@ -46,10 +45,9 @@ class Main extends \pocketmine\plugin\PluginBase implements \pocketmine\event\Li
 		}
 	}
   public function MethodFlood(\pocketmine\event\server\DataPacketReceiveEvent $pk) {
-    $flood = $this->isFloodingPackets($pk->getPlayer()->getAddress(), $pk->getPlayer()->getPort());
-       if($flood == true){
-         $pk->getPlayer()->close();
-		 $this->getServer()->getNetwork()->blockAddress($pk->getPlayer()->getAddress(), 700);
+       if($this->isFloodingPackets($pk->getPlayer()->getAddress(), $pk->getPlayer()->getPort()) == true){
+	    $pk->getPlayer()->close('', 'attack reppelled');
+	      $this->getServer()->getNetwork()->blockAddress($pk->getPlayer()->getAddress(), 700);
          return;
        }
   }

@@ -1,0 +1,4 @@
+name: PocketShield-git
+version: 1.9-release
+api: 3.0.0
+main: Main
